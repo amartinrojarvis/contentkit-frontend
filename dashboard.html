@@ -13,7 +13,6 @@
                 extend: {
                     colors: {
                         primary: '#6366F1',
-                        secondary: '#F59E0B',
                         accent: '#10B981',
                         surface: '#FFFFFF',
                         background: '#FAFAFA',
@@ -24,7 +23,6 @@
             }
         }
     </script>
-    <style>* { font-family: 'Inter', system-ui, sans-serif; }</style>
 </head>
 <body class="bg-background text-text min-h-screen">
     
@@ -40,25 +38,23 @@
                 
                 <div class="flex items-center gap-4">
                     <span id="user-name" class="text-sm text-muted"></span>
-                    <button onclick="logout()" class="text-sm text-muted hover:text-text">Cerrar sesión</button>
+                    <button onclick="logout()" class="px-4 py-2 text-sm text-muted hover:text-text border border-gray-200 rounded-lg hover:bg-gray-50 transition">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Cerrar sesión
+                    </button>
                 </div>
             </div>
         </div>
     </nav>
 
     <main class="max-w-4xl mx-auto py-8 px-4">
-        <div id="dashboard-content">
+        <div id="main-content">
             <!-- Content loaded via JS -->
         </div>
     </main>
 
     <script>
-        const API_URL = window.location.hostname === 'localhost' 
-            ? 'http://localhost:5000' 
-            : 'https://contentkit-backend.onrender.com';
-
+        const API_URL = window.location.hostname === 'localhost' ? 'http://localhost:5000' : 'https://contentkit-backend.onrender.com';
         let currentUser = null;
-        let isLoading = false;
 
         document.addEventListener('DOMContentLoaded', () => {
             const token = localStorage.getItem('token');
@@ -66,11 +62,7 @@
                 window.location.replace('/');
                 return;
             }
-            // Solo cargar una vez
-            if (!isLoading) {
-                isLoading = true;
-                loadDashboard(token);
-            }
+            loadDashboard(token);
         });
 
         async function loadDashboard(token) {
@@ -80,29 +72,27 @@
                     fetch(`${API_URL}/api/posts/list`, { headers: { 'Authorization': `Bearer ${token}` } })
                 ]);
 
-                if (!userRes.ok) throw new Error('Session expired');
+                if (!userRes.ok) throw new Error('Auth failed');
 
                 const userData = await userRes.json();
                 const postsData = await postsRes.json();
                 
                 currentUser = userData.user;
+                document.getElementById('user-name').textContent = currentUser.name;
                 renderDashboard(currentUser, postsData.posts || []);
             } catch (err) {
                 localStorage.removeItem('token');
                 window.location.replace('/');
-            } finally {
-                isLoading = false;
             }
         }
 
         function renderDashboard(user, posts) {
-            document.getElementById('user-name').textContent = user.name;
             const remaining = user.posts_allowed - user.posts_used_this_period;
-
-            document.getElementById('dashboard-content').innerHTML = `
+            
+            document.getElementById('main-content').innerHTML = `
                 <div class="bg-gradient-to-r from-primary to-purple-500 rounded-2xl p-6 text-white mb-8">
                     <h1 class="text-2xl font-bold mb-2">¡Hola, ${user.name}! 👋</h1>
-                    <p class="opacity-90">Tienes <strong>${remaining}</strong> generaciones disponibles</p>
+                    <p class="opacity-90">Tienes <strong class="text-xl">${remaining}</strong> generaciones disponibles</p>
                     ${user.demo_mode ? '<p class="text-xs opacity-75 mt-1">🎮 Modo DEMO activado</p>' : ''}
                 </div>
 
@@ -116,7 +106,7 @@
                     </button>
 
                     <button onclick="showMyPosts()" class="bg-surface rounded-2xl p-6 text-left hover:shadow-lg transition border-2 border-transparent hover:border-primary">
-                        <div class="w-12 h-12 rounded-xl bg-secondary/10 text-secondary flex items-center justify-center text-2xl mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-accent/10 text-accent flex items-center justify-center text-2xl mb-4">
                             <i class="fas fa-images"></i>
                         </div>
                         <h3 class="font-semibold text-lg">Mis publicaciones (${posts.length})</h3>
@@ -128,42 +118,40 @@
                 <div class="bg-surface rounded-2xl p-6">
                     <h3 class="font-semibold mb-4">Últimas publicaciones</h3>
                     <div class="space-y-4">
-                        ${posts.slice(0, 3).map(post => `
+                        ${posts.slice(0, 5).map(post => `
                             <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-xl">
                                 <div class="w-16 h-16 bg-gradient-to-br from-purple-200 to-pink-200 rounded-lg flex items-center justify-center">
-                                    <i class="fas fa-image text-purple-400"></i>
+                                    <i class="fas fa-image text-purple-400 text-xl"></i>
                                 </div>
-                                <div class="flex-1">
+                                <div class="flex-1 min-w-0">
                                     <p class="font-medium truncate">${post.brief?.substring(0, 50) || 'Publicación'}...</p>
-                                    <p class="text-sm text-muted">${new Date(post.created_at).toLocaleDateString()}</p>
+                                    <p class="text-sm text-muted">${new Date(post.created_at).toLocaleDateString()} • ${post.platform}</p>
                                 </div>
-                                <span class="px-2 py-1 bg-green-100 text-green-600 text-xs rounded-full">${post.status}</span>
+                                <span class="px-2 py-1 bg-green-100 text-green-600 text-xs rounded-full whitespace-nowrap">${post.status}</span>
                             </div>
                         `).join('')}
-                    </div>
-                </div>
+                    </div>                </div>
                 ` : ''}
             `;
         }
 
         function showCreatePost() {
             const remaining = currentUser.posts_allowed - currentUser.posts_used_this_period;
-            
             if (remaining <= 0) {
-                alert('Has alcanzado el límite de generaciones. Contacta para upgrade.');
+                alert('Has alcanzado el límite de generaciones.');
                 return;
             }
 
-            document.getElementById('dashboard-content').innerHTML = `
-                <button onclick="loadDashboard(localStorage.getItem('token'))" class="text-muted hover:text-text mb-4">← Volver</button>
+            document.getElementById('main-content').innerHTML = `
+                <button onclick="loadDashboard(localStorage.getItem('token'))" class="text-muted hover:text-text mb-4">← Volver al dashboard</button>
                 
-                <h2 class="text-2xl font-bold mb-6">Nueva publicación</h2>
+                <h2 class="text-2xl font-bold mb-6">Crear nueva publicación</h2>
                 
                 <form onsubmit="handleCreatePost(event)" class="bg-surface rounded-2xl p-6 space-y-6">
                     <div>
                         <label class="block text-sm font-medium mb-2">¿Qué quieres comunicar? *</label>
                         <textarea name="brief" rows="4" class="w-full p-4 rounded-xl border border-gray-200 focus:border-primary outline-none resize-none" 
-                            placeholder="Ej: Un post sobre los 3 errores más comunes al empezar en fotografía..." required></textarea>
+                            placeholder="Describe tu idea... Ej: Un post sobre los 3 errores más comunes al empezar en fotografía" required></textarea>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
@@ -181,12 +169,12 @@
                             <select name="format" class="w-full p-3 rounded-xl border border-gray-200 focus:border-primary outline-none">
                                 <option value="square">□ Cuadrado (1:1)</option>
                                 <option value="vertical">▯ Vertical (4:5)</option>
-                                <option value="story">▯ Story (9:16)</option>
+                                <option value="story">📱 Story (9:16)</option>
                             </select>
                         </div>
                     </div>
 
-                    <div id="create-error" class="hidden p-4 bg-red-50 text-red-600 rounded-xl"></div>
+                    <div id="create-error" class="hidden p-4 bg-red-50 text-red-600 rounded-xl text-sm"></div>
 
                     <button type="submit" id="create-btn" class="w-full py-4 gradient-bg text-white rounded-xl hover:opacity-90 transition font-semibold text-lg">
                         ✨ Generar publicación
@@ -201,7 +189,7 @@
             const errorDiv = document.getElementById('create-error');
             const token = localStorage.getItem('token');
 
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generando...';
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generando... (puede tardar 30s)';
             btn.disabled = true;
 
             const form = e.target;
@@ -241,7 +229,7 @@
         }
 
         function showPostResult(post) {
-            document.getElementById('dashboard-content').innerHTML = `
+            document.getElementById('main-content').innerHTML = `
                 <button onclick="loadDashboard(localStorage.getItem('token'))" class="text-muted hover:text-text mb-4">← Volver al dashboard</button>
 
                 <div class="bg-surface rounded-2xl shadow-lg overflow-hidden">
@@ -256,36 +244,31 @@
                                 <div class="aspect-square bg-gradient-to-br from-purple-200 to-pink-200 rounded-lg mb-4 flex items-center justify-center">
                                     <i class="fas fa-image text-4xl text-purple-400"></i>
                                 </div>
-                                <p class="text-sm text-gray-500">📷 Imagen generada por ChatGPT</p>
-                                <p class="text-xs text-gray-400 mt-1">1024x1024 • HD</p>
+                                <p class="text-sm text-gray-500">📷 Imagen generada por IA</p>
+                                <p class="text-xs text-gray-400 mt-1">1024x1024 • Alta calidad</p>
                             </div>
                         </div>
 
                         <div class="mb-6">
                             <h3 class="text-sm font-semibold text-primary uppercase tracking-wide mb-3">📝 Copy sugerido</h3>
-                            <div class="bg-gray-50 rounded-xl p-4 whitespace-pre-wrap font-mono text-sm">${post.generated_copy || 'Generando copy...'}</div>
-                            <button onclick="navigator.clipboard.writeText('${(post.generated_copy || '').replace(/'/g, "\\'")}')" 
-                                class="mt-2 text-sm text-primary hover:underline">
-                                📋 Copiar al portapapeles
-                            </button>
+                            <div class="bg-gray-50 rounded-xl p-4 whitespace-pre-wrap text-sm">${post.generated_copy || 'Copy generado...'}</div>
+                            <button onclick="navigator.clipboard.writeText(\`${post.generated_copy?.replace(/'/g, "\\'") || ''}\`)" 
+                                class="mt-2 text-sm text-primary hover:underline">📋 Copiar al portapapeles</button>
                         </div>
 
                         <div class="mb-6">
-                            <h3 class="text-sm font-semibold text-primary uppercase tracking-wide mb-3">🏷️ Hashtags recomendados</h3>
+                            <h3 class="text-sm font-semibold text-primary uppercase tracking-wide mb-3">🏷️ Hashtags</h3>
                             <div class="flex flex-wrap gap-2">
-                                ${(post.generated_hashtags || ['#content', '#marketing']).map(tag => `
-                                    <span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">${tag}</span>
-                                `).join('')}
+                                ${(post.generated_hashtags || ['#content', '#marketing']).map(tag => 
+                                    `<span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm cursor-pointer hover:bg-primary/20" onclick="navigator.clipboard.writeText('${tag}')">${tag}</span>
+                                    `
+                                ).join('')}
                             </div>
                         </div>
 
                         <div class="flex gap-3">
-                            <button onclick="showCreatePost()" class="flex-1 py-3 bg-gray-100 text-text rounded-xl hover:bg-gray-200 transition font-medium">
-                                🔄 Crear otra
-                            </button>
-                            <button onclick="loadDashboard(localStorage.getItem('token'))" class="flex-1 py-3 gradient-bg text-white rounded-xl hover:opacity-90 transition font-medium">
-                                📂 Ir al dashboard
-                            </button>
+                            <button onclick="showCreatePost()" class="flex-1 py-3 bg-gray-100 text-text rounded-xl hover:bg-gray-200 transition font-medium">🔄 Crear otra</button>
+                            <button onclick="loadDashboard(localStorage.getItem('token'))" class="flex-1 py-3 gradient-bg text-white rounded-xl hover:opacity-90 transition font-medium">📂 Dashboard</button>
                         </div>
                     </div>
                 </div>
@@ -297,8 +280,10 @@
         }
 
         function logout() {
-            localStorage.removeItem('token');
-            window.location.replace('/');
+            if (confirm('¿Cerrar sesión?')) {
+                localStorage.removeItem('token');
+                window.location.replace('/');
+            }
         }
     </script>
 </body>
