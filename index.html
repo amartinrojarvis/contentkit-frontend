@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ContentKit Alpha — Tu agencia de contenido</title>
+    <title>ContentKit Alpha — Tu agencia de contenido, en una app</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -62,214 +62,392 @@
                         <i class="fas fa-wand-magic-sparkles text-white text-sm"></i>
                     </div>
                     <span class="font-bold text-xl">ContentKit</span>
-                    <span id="demo-badge" class="hidden px-2 py-0.5 bg-accent/10 text-accent text-xs font-semibold rounded-full">DEMO</span>
+                    <span id="demo-badge" class="hidden px-2 py-0.5 bg-accent/10 text-accent text-xs font-semibold rounded-full ml-2">DEMO MODE</span>
                 </div>
-                <div class="hidden md:flex items-center gap-8" id="nav-links">
-                    <span id="user-name" class="text-sm text-muted"></span>
-                    <button onclick="logout()" id="logout-btn" class="hidden text-sm text-muted hover:text-text transition">Cerrar sesión</button>
+                <div class="flex items-center gap-4" id="nav-content">
+                    <!-- Content loaded dynamically -->
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- Main Content -->
-    <main class="pt-24 pb-12 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-4xl mx-auto" id="main-container">
-            <!-- Content loaded dynamically -->
-        </div>
-    </main>
+    <!-- Main Content Container -->
+    <div id="app-container">
+        <!-- Landing Page -->
+        <div id="landing-page">
+            <!-- Hero -->
+            <section class="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
+                <div class="max-w-5xl mx-auto text-center">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 bg-primary/5 rounded-full text-primary text-sm font-medium mb-6">
+                        <i class="fas fa-sparkles"></i>
+                        <span id="hero-badge">🎉 Alpha: 50% OFF primer mes</span>
+                    </div>
+                    
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-6 leading-tight">
+                        Tu agencia de contenido,
+                        <br>
+                        <span class="gradient-text">en una app</span>
+                    </h1>
+                    
+                    <p class="text-lg sm:text-xl text-muted max-w-2xl mx-auto mb-8 leading-relaxed">
+                        4 publicaciones profesionales generadas por IA + la estrategia para hacer crecer tu cuenta.
+                        <br class="hidden sm:block">
+                        Sin contratos. Cancela cuando quieras.
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+                        <button onclick="showPricing()" class="px-8 py-4 gradient-bg text-white rounded-2xl hover:opacity-90 transition font-semibold text-lg flex items-center justify-center gap-2">
+                            Ver planes
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                        <button id="demo-btn" onclick="showDemoSignup()" class="hidden px-8 py-4 bg-accent text-white rounded-2xl hover:bg-accent/90 transition font-semibold text-lg">
+                            🎮 Probar gratis (Demo)
+                        </button>
+                    </div>
+                    
+                    <div class="flex flex-wrap justify-center gap-8 text-sm text-muted">
+                        <span class="flex items-center gap-2">
+                            <i class="fas fa-check-circle text-accent"></i>
+                            Imágenes con ChatGPT
+                        </span>
+                        <span class="flex items-center gap-2">
+                            <i class="fas fa-check-circle text-accent"></i>
+                            Copy optimizado
+                        </span>
+                        <span class="flex items-center gap-2">
+                            <i class="fas fa-check-circle text-accent"></i>
+                            Estrategia incluida
+                        </span>
+                    </div>
+                </div>
+            </section>
 
-    <!-- Footer -->
-    <footer class="py-12 px-4 sm:px-6 lg:px-8 border-t border-gray-100">
-        <div class="max-w-6xl mx-auto text-center text-sm text-muted">
-            <p>ContentKit Alpha — Tu agencia de contenido, en una app</p>
+            <!-- Pricing Section -->
+            <section id="pricing" class="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+                <div class="max-w-6xl mx-auto">
+                    <div class="text-center mb-16">
+                        <h2 class="text-3xl sm:text-4xl font-bold mb-4">Elige tu plan</h2>
+                        <p class="text-muted text-lg">Todo incluido: imágenes + copy + estrategia</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <!-- Starter -->
+                        <div class="bg-surface rounded-3xl p-8 shadow-lg border-2 border-transparent hover:border-primary transition">
+                            <div class="mb-6">
+                                <h3 class="text-xl font-bold mb-2">Starter</h3>
+                                <p class="text-muted text-sm">Perfecto para empezar</p>
+                            </div>
+                            
+                            <div class="mb-6">
+                                <span class="text-4xl font-bold">50€</span>
+                                <span class="text-muted">/mes</span>
+                            </div>
+                            
+                            <ul class="space-y-4 mb-8">
+                                <li class="flex items-start gap-3">
+                                    <i class="fas fa-check text-accent mt-1"></i>
+                                    <span><strong>4 publicaciones</strong> (fotos)</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <i class="fas fa-check text-accent mt-1"></i>
+                                    <span>Copy + hashtags incluidos</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <i class="fas fa-check text-accent mt-1"></i>
+                                    <span>Estrategia de contenido IA</span>
+                                </li>
+                            </ul>
+                            
+                            <button onclick="selectPlan('starter')" class="w-full py-3 border-2 border-primary text-primary rounded-xl hover:bg-primary hover:text-white transition font-semibold">
+                                Elegir Starter
+                            </button>
+                        </div>
+                        
+                        <!-- Pro -->
+                        <div class="bg-surface rounded-3xl p-8 shadow-xl border-2 border-secondary relative">
+                            <div class="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                                <span class="bg-secondary text-white px-4 py-1 rounded-full text-xs font-semibold">MÁS POPULAR</span>
+                            </div>
+                            
+                            <div class="mb-6">
+                                <h3 class="text-xl font-bold mb-2">Pro</h3>
+                                <p class="text-muted text-sm">Para creadores serios</p>
+                            </div>
+                            
+                            <div class="mb-6">
+                                <span class="text-4xl font-bold">99€</span>
+                                <span class="text-muted">/mes</span>
+                            </div>
+                            
+                            <ul class="space-y-4 mb-8">
+                                <li class="flex items-start gap-3">
+                                    <i class="fas fa-check text-accent mt-1"></i>
+                                    <span><strong>8 publicaciones</strong> (fotos)</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <i class="fas fa-check text-accent mt-1"></i>
+                                    <span><strong>1 sesión/mes</strong> con Alberto</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <i class="fas fa-check text-accent mt-1"></i>
+                                    <span>Soporte prioritario</span>
+                                </li>
+                            </ul>
+                            
+                            <button onclick="selectPlan('pro')" class="w-full py-3 gradient-bg text-white rounded-xl hover:opacity-90 transition font-semibold">
+                                Elegir Pro
+                            </button>
+                        </div>
+                        
+                        <!-- Business -->
+                        <div class="bg-surface rounded-3xl p-8 shadow-lg border-2 border-transparent hover:border-primary transition">
+                            <div class="mb-6">
+                                <h3 class="text-xl font-bold mb-2">Business</h3>
+                                <p class="text-muted text-sm">Para marcas y agencias</p>
+                            </div>
+                            
+                            <div class="mb-6">
+                                <span class="text-4xl font-bold">199€</span>
+                                <span class="text-muted">/mes</span>
+                            </div>
+                            
+                            <ul class="space-y-4 mb-8">
+                                <li class="flex items-start gap-3">
+                                    <i class="fas fa-check text-accent mt-1"></i>
+                                    <span><strong>16 publicaciones</strong> (fotos)</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <i class="fas fa-check text-accent mt-1"></i>
+                                    <span><strong>2 sesiones/mes</strong> con Alberto</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <i class="fas fa-check text-accent mt-1"></i>
+                                    <span>WhatsApp directo</span>
+                                </li>
+                            </ul>
+                            
+                            <button onclick="selectPlan('business')" class="w-full py-3 border-2 border-primary text-primary rounded-xl hover:bg-primary hover:text-white transition font-semibold">
+                                Elegir Business
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <p class="text-center text-muted text-sm mt-8">
+                        <i class="fas fa-shield-alt mr-1"></i>
+                        Cancela cuando quieras. Sin permanencia.
+                    </p>
+                </div>
+            </section>
+
+            <!-- How it Works -->
+            <section class="py-20 px-4 sm:px-6 lg:px-8">
+                <div class="max-w-5xl mx-auto">
+                    <div class="text-center mb-16">
+                        <h2 class="text-3xl sm:text-4xl font-bold mb-4">¿Cómo funciona?</h2>
+                        <p class="text-muted text-lg">De tu idea a publicación lista en minutos</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                        <div class="text-center">
+                            <div class="w-16 h-16 rounded-2xl gradient-bg flex items-center justify-center text-white text-2xl mx-auto mb-4">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                            <h3 class="font-semibold mb-2">1. Brief</h3>
+                            <p class="text-muted text-sm">Describe qué necesitas comunicar</p>
+                        </div>
+                        
+                        <div class="text-center">
+                            <div class="w-16 h-16 rounded-2xl bg-secondary flex items-center justify-center text-white text-2xl mx-auto mb-4">
+                                <i class="fas fa-wand-magic-sparkles"></i>
+                            </div>
+                            <h3 class="font-semibold mb-2">2. Generación</h3>
+                            <p class="text-muted text-sm">IA crea imagen + copy + hashtags</p>
+                        </div>
+                        
+                        <div class="text-center">
+                            <div class="w-16 h-16 rounded-2xl bg-accent flex items-center justify-center text-white text-2xl mx-auto mb-4">
+                                <i class="fas fa-eye"></i>
+                            </div>
+                            <h3 class="font-semibold mb-2">3. Revisión</h3>
+                            <p class="text-muted text-sm">Aprueba o pide ajustes</p>
+                        </div>
+                        
+                        <div class="text-center">
+                            <div class="w-16 h-16 rounded-2xl bg-purple-500 flex items-center justify-center text-white text-2xl mx-auto mb-4">
+                                <i class="fas fa-download"></i>
+                            </div>
+                            <h3 class="font-semibold mb-2">4. Publica</h3>
+                            <p class="text-muted text-sm">Descarga y súbelo a tus redes</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FAQ -->
+            <section class="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+                <div class="max-w-3xl mx-auto">
+                    <h2 class="text-3xl font-bold text-center mb-12">Preguntas frecuentes</h2>
+                    
+                    <div class="space-y-6">
+                        <div class="bg-surface rounded-2xl p-6 shadow-sm">
+                            <h3 class="font-semibold mb-2">¿Qué incluye exactamente cada publicación?</h3>
+                            <p class="text-muted">Cada publicación incluye: 1 imagen generada con ChatGPT Image 1.5 en alta calidad, copy/caption optimizado para tu plataforma, y hashtags relevantes investigados automáticamente.</p>
+                        </div>
+                        
+                        <div class="bg-surface rounded-2xl p-6 shadow-sm">
+                            <h3 class="font-semibold mb-2">¿Puedo pedir cambios en las publicaciones?</h3>
+                            <p class="text-muted">Sí, si no te gusta el resultado puedes solicitar una regeneración (contrae 1 crédito adicional) o ajustes específicos como "más colorido" o "tono más formal".</p>
+                        </div>
+                        
+                        <div class="bg-surface rounded-2xl p-6 shadow-sm">
+                            <h3 class="font-semibold mb-2">¿Para qué plataformas sirve el contenido?</h3>
+                            <p class="text-muted">Actualmente optimizamos para Instagram (feed, stories, reels), TikTok y LinkedIn. Próximamente añadiremos más formatos incluyendo video corto de 8 segundos.</p>
+                        </div>
+                        
+                        <div class="bg-surface rounded-2xl p-6 shadow-sm">
+                            <h3 class="font-semibold mb-2">¿Qué son las sesiones con Alberto?</h3>
+                            <p class="text-muted">Son videollamadas de 30 minutos donde Alberto (experto en contenido) revisa tu estrategia, analiza tu cuenta y te da recomendaciones personalizadas para mejorar tus resultados.</p>
+                        </div>
+                        
+                        <div class="bg-surface rounded-2xl p-6 shadow-sm">
+                            <h3 class="font-semibold mb-2">¿Puedo cancelar cuando quiera?</h3>
+                            <p class="text-muted">Sí, sin preguntas. Cancela desde tu cuenta y seguirás teniendo acceso hasta el final del período pagado. No hay permanencia ni penalizaciones.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CTA Final -->
+            <section class="py-20 px-4 sm:px-6 lg:px-8 gradient-bg text-white">
+                <div class="max-w-3xl mx-auto text-center">
+                    <h2 class="text-3xl sm:text-4xl font-bold mb-4">¿Listo para transformar tu contenido?</h2>
+                    <p class="text-white/80 text-lg mb-8">Empieza hoy con 50% de descuento en tu primer mes</p>
+                    
+                    <button onclick="showPricing()" class="px-8 py-4 bg-white text-primary rounded-2xl hover:bg-gray-100 transition font-semibold text-lg">
+                        Ver planes y empezar
+                    </button>
+                    
+                    <p class="text-white/60 text-sm mt-4">Código: ALPHA50</p>
+                </div>
+            </section>
+
+            <!-- Footer -->
+            <footer class="py-12 px-4 sm:px-6 lg:px-8 border-t border-gray-100">
+                <div class="max-w-6xl mx-auto">
+                    <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 rounded-lg gradient-bg flex items-center justify-center">
+                                <i class="fas fa-wand-magic-sparkles text-white text-xs"></i>
+                            </div>
+                            <span class="font-bold text-lg">ContentKit</span>
+                            <span id="footer-demo-badge" class="hidden px-2 py-0.5 bg-accent text-white text-xs rounded-full">DEMO</span>
+                        </div>
+                        
+                        <div class="flex gap-6 text-sm text-muted">
+                            <a href="#" class="hover:text-text transition">Términos</a>
+                            <a href="#" class="hover:text-text transition">Privacidad</a>
+                            <a href="#" class="hover:text-text transition">Contacto</a>
+                        </div>
+                        
+                        <p class="text-sm text-muted">© 2026 ContentKit Alpha</p>
+                    </div>
+                </div>
+            </footer>
         </div>
-    </footer>
+
+        <!-- Demo Signup Modal -->
+        <div id="demo-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+            <div class="bg-surface rounded-3xl p-8 max-w-md w-full shadow-2xl">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl font-bold">🎮 Modo Demo</h3>
+                    <button onclick="hideDemoModal()" class="text-muted hover:text-text">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                
+                <p class="text-muted mb-6">Crea una cuenta de prueba con generación ilimitada. Perfecto para testear antes de suscribirte.</p>
+                
+                <form class="space-y-4" onsubmit="handleDemoSignup(event)">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Email</label>
+                        <input type="email" name="email" class="w-full p-3 rounded-xl border border-gray-200 focus:border-primary outline-none" placeholder="tu@email.com" required>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Contraseña</label>
+                        <input type="password" name="password" class="w-full p-3 rounded-xl border border-gray-200 focus:border-primary outline-none" placeholder="••••••••" required>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Nombre de marca</label>
+                        <input type="text" name="brand_name" class="w-full p-3 rounded-xl border border-gray-200 focus:border-primary outline-none" placeholder="@micuenta" required>
+                    </div>
+                    
+                    <button type="submit" id="demo-signup-btn" class="w-full py-3 gradient-bg text-white rounded-xl hover:opacity-90 transition font-semibold">
+                        Crear cuenta demo
+                    </button>
+                </form>
+                
+                <div id="demo-error" class="hidden mt-4 p-3 bg-red-50 text-red-600 rounded-xl text-sm"></div>
+            </div>
+        </div>
+    </div>
 
     <script>
-        // Configuración API
+        // Config
         const API_URL = window.location.hostname === 'localhost' 
             ? 'http://localhost:5000' 
             : 'https://contentkit-backend.onrender.com';
-        
-        // Estado global
-        let currentUser = null;
-        let selectedPlan = 'starter';
 
-        // Verificar sesión al cargar
-        document.addEventListener('DOMContentLoaded', () => {
+        // Detectar modo demo al cargar
+        document.addEventListener('DOMContentLoaded', checkDemoMode);
+
+        async function checkDemoMode() {
+            try {
+                const response = await fetch(`${API_URL}/api/plans`);
+                const data = await response.json();
+                
+                if (data.demo_mode) {
+                    // Mostrar badges de demo
+                    document.getElementById('demo-badge').classList.remove('hidden');
+                    document.getElementById('footer-demo-badge').classList.remove('hidden');
+                    document.getElementById('demo-btn').classList.remove('hidden');
+                    document.getElementById('hero-badge').innerHTML = '🎮 Modo DEMO: Generación ilimitada';
+                }
+            } catch (e) {
+                console.log('No se pudo verificar modo demo');
+            }
+            
+            // Verificar si hay sesión
             const token = localStorage.getItem('token');
             if (token) {
                 fetchUser(token);
-            } else {
-                showLanding();
             }
-        });
-
-        // ===== VISTAS =====
-        
-        function showLanding() {
-            document.getElementById('logout-btn').classList.add('hidden');
-            document.getElementById('user-name').textContent = '';
-            
-            document.getElementById('main-container').innerHTML = `
-                <div class="text-center mb-12 fade-in">
-                    <div class="inline-flex items-center gap-2 px-4 py-2 bg-primary/5 rounded-full text-primary text-sm font-medium mb-6">
-                        <i class="fas fa-sparkles"></i>
-                        <span>🎉 Modo DEMO: 2 generaciones gratuitas</span>
-                    </div>
-                    <h1 class="text-4xl sm:text-5xl font-extrabold mb-6">
-                        Tu agencia de contenido,<br>
-                        <span class="gradient-text">en una app</span>
-                    </h1>
-                    <p class="text-lg text-muted max-w-2xl mx-auto mb-8">
-                        Genera publicaciones profesionales con IA. Sin contratos, sin complejidad.
-                    </p>
-                    <button onclick="showSignup()" class="px-8 py-4 gradient-bg text-white rounded-2xl hover:opacity-90 transition font-semibold text-lg">
-                        Empezar gratis →
-                    </button>
-                </div>
-
-                <!-- Features -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-                    <div class="bg-surface rounded-2xl p-6 text-center">
-                        <div class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center text-2xl mx-auto mb-4">
-                            <i class="fas fa-image"></i>
-                        </div>
-                        <h3 class="font-semibold mb-2">Imágenes con IA</h3>
-                        <p class="text-sm text-muted">ChatGPT Image 1.5 para fotos profesionales</p>
-                    </div>
-                    <div class="bg-surface rounded-2xl p-6 text-center">
-                        <div class="w-12 h-12 rounded-xl bg-secondary/10 text-secondary flex items-center justify-center text-2xl mx-auto mb-4">
-                            <i class="fas fa-pen-fancy"></i>
-                        </div>
-                        <h3 class="font-semibold mb-2">Copy optimizado</h3>
-                        <p class="text-sm text-muted">Textos que enganchan y convierten</p>
-                    </div>
-                    <div class="bg-surface rounded-2xl p-6 text-center">
-                        <div class="w-12 h-12 rounded-xl bg-accent/10 text-accent flex items-center justify-center text-2xl mx-auto mb-4">
-                            <i class="fas fa-bolt"></i>
-                        </div>
-                        <h3 class="font-semibold mb-2">En minutos</h3>
-                        <p class="text-sm text-muted">De idea a publicación lista</p>
-                    </div>
-                </div>
-            `;
         }
 
-        function showSignup() {
-            document.getElementById('main-container').innerHTML = `
-                <div class="max-w-md mx-auto fade-in">
-                    <div class="bg-surface rounded-3xl p-8 shadow-lg">
-                        <h2 class="text-2xl font-bold mb-6 text-center">Crear cuenta gratis</h2>
-                        <p class="text-sm text-muted text-center mb-6">Modo DEMO: 2 generaciones gratuitas, sin tarjeta</p>
-                        
-                        <form id="signup-form" class="space-y-4" onsubmit="handleSignup(event)">
-                            <div>
-                                <label class="block text-sm font-medium mb-1">Email</label>
-                                <input type="email" name="email" class="w-full p-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none" placeholder="tu@email.com" required>
-                            </div>
-                            
-                            <div>
-                                <label class="block text-sm font-medium mb-1">Contraseña</label>
-                                <input type="password" name="password" class="w-full p-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none" placeholder="••••••••" required minlength="6">
-                            </div>
-                            
-                            <div>
-                                <label class="block text-sm font-medium mb-1">Nombre de marca/cuenta</label>
-                                <input type="text" name="brand_name" class="w-full p-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none" placeholder="@micuenta" required>
-                            </div>
-                            
-                            <button type="submit" id="signup-btn" class="w-full py-3 gradient-bg text-white rounded-xl hover:opacity-90 transition font-semibold">
-                                Crear cuenta gratis
-                            </button>
-                        </form>
-                        
-                        <p class="text-center text-sm text-muted mt-4">
-                            ¿Ya tienes cuenta? <button onclick="showLogin()" class="text-primary hover:underline">Inicia sesión</button>
-                        </p>
-                        
-                        <div id="signup-error" class="hidden mt-4 p-3 bg-red-50 text-red-600 rounded-xl text-sm"></div>
-                    </div>
-                </div>
-            `;
+        function showPricing() {
+            document.getElementById('pricing').scrollIntoView({ behavior: 'smooth' });
         }
 
-        function showLogin() {
-            document.getElementById('main-container').innerHTML = `
-                <div class="max-w-md mx-auto fade-in">
-                    <div class="bg-surface rounded-3xl p-8 shadow-lg">
-                        <h2 class="text-2xl font-bold mb-6 text-center">Iniciar sesión</h2>
-                        
-                        <form id="login-form" class="space-y-4" onsubmit="handleLogin(event)">
-                            <div>
-                                <label class="block text-sm font-medium mb-1">Email</label>
-                                <input type="email" name="email" class="w-full p-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none" placeholder="tu@email.com" required>
-                            </div>
-                            
-                            <div>
-                                <label class="block text-sm font-medium mb-1">Contraseña</label>
-                                <input type="password" name="password" class="w-full p-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none" placeholder="••••••••" required>
-                            </div>
-                            
-                            <button type="submit" id="login-btn" class="w-full py-3 gradient-bg text-white rounded-xl hover:opacity-90 transition font-semibold">
-                                Entrar
-                            </button>
-                        </form>
-                        
-                        <p class="text-center text-sm text-muted mt-4">
-                            ¿No tienes cuenta? <button onclick="showSignup()" class="text-primary hover:underline">Crear cuenta</button>
-                        </p>
-                        
-                        <div id="login-error" class="hidden mt-4 p-3 bg-red-50 text-red-600 rounded-xl text-sm"></div>
-                    </div>
-                </div>
-            `;
+        function showDemoSignup() {
+            document.getElementById('demo-modal').classList.remove('hidden');
+            document.getElementById('demo-modal').classList.add('flex');
         }
 
-        function showDashboard(user) {
-            currentUser = user;
-            document.getElementById('demo-badge').classList.remove('hidden');
-            document.getElementById('logout-btn').classList.remove('hidden');
-            document.getElementById('user-name').textContent = user.name;
-            
-            const postsRemaining = user.posts_allowed - user.posts_used_this_period;
-            
-            document.getElementById('main-container').innerHTML = `
-                <div class="fade-in">
-                    <div class="bg-gradient-to-r from-primary to-purple-500 rounded-2xl p-6 text-white mb-8">
-                        <h2 class="text-2xl font-bold mb-2">¡Hola, ${user.name}!</h2>
-                        <p class="opacity-90">Tienes <strong>${postsRemaining}</strong> generaciones disponibles</p>
-                        ${user.demo_mode ? '<p class="text-xs opacity-75 mt-1">Modo DEMO: 2 generaciones gratuitas</p>' : ''}
-                    </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <button onclick="showCreatePost()" class="bg-surface rounded-2xl p-6 text-left hover:shadow-lg transition border-2 border-transparent hover:border-primary">
-                            <div class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center text-2xl mb-4">
-                                <i class="fas fa-plus"></i>
-                            </div>
-                            <h3 class="font-semibold text-lg mb-1">Nueva publicación</h3>
-                            <p class="text-sm text-muted">Generar contenido con IA</p>
-                        </button>
-                        
-                        <button onclick="showMyPosts()" class="bg-surface rounded-2xl p-6 text-left hover:shadow-lg transition border-2 border-transparent hover:border-primary">
-                            <div class="w-12 h-12 rounded-xl bg-secondary/10 text-secondary flex items-center justify-center text-2xl mb-4">
-                                <i class="fas fa-images"></i>
-                            </div>
-                            <h3 class="font-semibold text-lg mb-1">Mis publicaciones</h3>
-                            <p class="text-sm text-muted">Ver historial y descargar</p>
-                        </button>
-                    </div>
-                </div>
-            `;
+        function hideDemoModal() {
+            document.getElementById('demo-modal').classList.add('hidden');
+            document.getElementById('demo-modal').classList.remove('flex');
         }
 
-        // ===== FUNCIONES API =====
-        
-        async function handleSignup(e) {
+        function selectPlan(plan) {
+            localStorage.setItem('selectedPlan', plan);
+            showDemoSignup();
+        }
+
+        async function handleDemoSignup(e) {
             e.preventDefault();
-            const btn = document.getElementById('signup-btn');
-            const errorDiv = document.getElementById('signup-error');
+            const btn = document.getElementById('demo-signup-btn');
+            const errorDiv = document.getElementById('demo-error');
             
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creando...';
             btn.disabled = true;
@@ -294,59 +472,20 @@
                 
                 if (response.ok) {
                     localStorage.setItem('token', result.token);
-                    showDashboard(result.user);
+                    window.location.href = '/dashboard.html';
                 } else {
                     errorDiv.textContent = result.error || 'Error al crear cuenta';
                     errorDiv.classList.remove('hidden');
                 }
             } catch (err) {
-                errorDiv.textContent = 'Error de conexión. Intenta de nuevo.';
+                errorDiv.textContent = 'Error de conexión';
                 errorDiv.classList.remove('hidden');
             } finally {
-                btn.innerHTML = 'Crear cuenta gratis';
+                btn.innerHTML = 'Crear cuenta demo';
                 btn.disabled = false;
             }
         }
-        
-        async function handleLogin(e) {
-            e.preventDefault();
-            const btn = document.getElementById('login-btn');
-            const errorDiv = document.getElementById('login-error');
-            
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Entrando...';
-            btn.disabled = true;
-            
-            const formData = new FormData(e.target);
-            const data = {
-                email: formData.get('email'),
-                password: formData.get('password')
-            };
-            
-            try {
-                const response = await fetch(`${API_URL}/api/auth/login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
-                });
-                
-                const result = await response.json();
-                
-                if (response.ok) {
-                    localStorage.setItem('token', result.token);
-                    showDashboard(result.user);
-                } else {
-                    errorDiv.textContent = result.error || 'Credenciales incorrectas';
-                    errorDiv.classList.remove('hidden');
-                }
-            } catch (err) {
-                errorDiv.textContent = 'Error de conexión. Intenta de nuevo.';
-                errorDiv.classList.remove('hidden');
-            } finally {
-                btn.innerHTML = 'Entrar';
-                btn.disabled = false;
-            }
-        }
-        
+
         async function fetchUser(token) {
             try {
                 const response = await fetch(`${API_URL}/api/user/profile`, {
@@ -354,199 +493,19 @@
                 });
                 
                 if (response.ok) {
-                    const result = await response.json();
-                    showDashboard(result.user);
+                    window.location.href = '/dashboard.html';
                 } else {
                     localStorage.removeItem('token');
-                    showLanding();
                 }
-            } catch (err) {
+            } catch (e) {
                 localStorage.removeItem('token');
-                showLanding();
             }
         }
-        
-        function logout() {
-            localStorage.removeItem('token');
-            currentUser = null;
-            showLanding();
-        }
-        
-        function showCreatePost() {
-            document.getElementById('main-container').innerHTML = `
-                <div class="fade-in">
-                    <button onclick="showDashboard(currentUser)" class="text-muted hover:text-text mb-4">← Volver</button>
-                    
-                    <h2 class="text-2xl font-bold mb-6">Nueva publicación</h2>
-                    
-                    <form id="create-form" class="space-y-6" onsubmit="handleCreatePost(event)">
-                        <div>
-                            <label class="block text-sm font-medium mb-2">¿Sobre qué tema?</label>
-                            <textarea name="brief" class="w-full p-4 rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none resize-none" rows="4" placeholder="Ej: Un post sobre cómo empezar en fotografía de retrato..." required></textarea>
-                        </div>
-                        
-                        <div>
-                            <label class="block text-sm font-medium mb-2">Plataforma</label>
-                            <select name="platform" class="w-full p-3 rounded-xl border border-gray-200 focus:border-primary outline-none">
-                                <option value="instagram">Instagram</option>
-                                <option value="tiktok">TikTok</option>
-                                <option value="linkedin">LinkedIn</option>
-                            </select>
-                        </div>
-                        
-                        <div>
-                            <label class="block text-sm font-medium mb-2">Formato</label>
-                            <select name="format" class="w-full p-3 rounded-xl border border-gray-200 focus:border-primary outline-none">
-                                <option value="square">Cuadrado (1:1)</option>
-                                <option value="vertical">Vertical (4:5)</option>
-                                <option value="story">Story (9:16)</option>
-                            </select>
-                        </div>
-                        
-                        <button type="submit" id="create-btn" class="w-full py-4 gradient-bg text-white rounded-xl hover:opacity-90 transition font-semibold">
-                            ✨ Generar publicación
-                        </button>
-                    </form>
-                    
-                    <div id="create-error" class="hidden mt-4 p-3 bg-red-50 text-red-600 rounded-xl text-sm"></div>
-                </div>
-            `;
-        }
-        
-        async function handleCreatePost(e) {
-            e.preventDefault();
-            const btn = document.getElementById('create-btn');
-            const errorDiv = document.getElementById('create-error');
-            const token = localStorage.getItem('token');
-            
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generando...';
-            btn.disabled = true;
-            
-            const formData = new FormData(e.target);
-            const data = {
-                type: 'product',
-                brief: formData.get('brief'),
-                platform: formData.get('platform'),
-                format: formData.get('format'),
-                tone: 'professional'
-            };
-            
-            try {
-                const response = await fetch(`${API_URL}/api/posts/generate`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify(data)
-                });
-                
-                const result = await response.json();
-                
-                if (response.ok) {
-                    showPostResult(result.post);
-                } else {
-                    errorDiv.textContent = result.error || 'Error al generar';
-                    errorDiv.classList.remove('hidden');
-                }
-            } catch (err) {
-                errorDiv.textContent = 'Error de conexión. Intenta de nuevo.';
-                errorDiv.classList.remove('hidden');
-            } finally {
-                btn.innerHTML = '✨ Generar publicación';
-                btn.disabled = false;
-            }
-        }
-        
-        function showPostResult(post) {
-            document.getElementById('main-container').innerHTML = `
-                <div class="fade-in">
-                    <button onclick="showDashboard(currentUser)" class="text-muted hover:text-text mb-4">← Volver al dashboard</button>
-                    
-                    <div class="bg-surface rounded-2xl shadow-lg overflow-hidden">
-                        <div class="p-6 border-b border-gray-100">
-                            <h2 class="text-xl font-bold mb-2">✨ Publicación lista</h2>
-                            <p class="text-sm text-muted">Generado el ${new Date(post.created_at).toLocaleDateString()}</p>
-                        </div>
-                        
-                        <div class="p-6">
-                            <div class="bg-gradient-to-br from-purple-100 to-pink-100 rounded-xl p-8 mb-6 flex items-center justify-center">
-                                <div class="bg-white rounded-xl shadow p-6 max-w-xs">
-                                    <div class="aspect-square bg-gradient-to-br from-purple-200 to-pink-200 rounded-lg mb-4 flex items-center justify-center">
-                                        <i class="fas fa-image text-4xl text-purple-400"></i>
-                                    </div>
-                                    <p class="text-xs text-gray-400">Imagen generada por IA</p>
-                                </div>
-                            </div>
-                            
-                            <div class="mb-6">
-                                <h3 class="text-sm font-semibold text-primary uppercase tracking-wide mb-2">Copy sugerido</h3>
-                                <div class="bg-gray-50 rounded-xl p-4 whitespace-pre-wrap">${post.generated_copy || 'Copy generado por IA...'}</div>
-                            </div>
-                            
-                            <div class="mb-6">
-                                <h3 class="text-sm font-semibold text-primary uppercase tracking-wide mb-2">Hashtags</h3>
-                                <p class="text-primary">${post.generated_hashtags ? post.generated_hashtags.join(' ') : '#content #marketing'}</p>
-                            </div>
-                            
-                            <div class="flex gap-3">
-                                <button onclick="showDashboard(currentUser)" class="flex-1 py-3 bg-gray-100 text-text rounded-xl hover:bg-gray-200 transition font-medium">
-                                    Crear otra
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-        
-        async function showMyPosts() {
-            const token = localStorage.getItem('token');
-            
-            try {
-                const response = await fetch(`${API_URL}/api/posts/list`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                
-                const result = await response.json();
-                
-                let postsHtml = '';
-                if (result.posts && result.posts.length > 0) {
-                    postsHtml = result.posts.map(post => `
-                        <div class="bg-surface rounded-2xl p-4 border border-gray-100">
-                            <div class="flex items-center gap-4">
-                                <div class="w-16 h-16 bg-gradient-to-br from-purple-200 to-pink-200 rounded-lg flex items-center justify-center">
-                                    <i class="fas fa-image text-purple-400"></i>
-                                </div>
-                                <div class="flex-1">
-                                    <p class="font-medium">${post.brief ? post.brief.substring(0, 50) + '...' : 'Publicación'}</p>
-                                    <p class="text-sm text-muted">${new Date(post.created_at).toLocaleDateString()}</p>
-                                </div>
-                                <span class="px-2 py-1 bg-primary/10 text-primary text-xs rounded-full">${post.status}</span>
-                            </div>
-                        </div>
-                    `).join('');
-                } else {
-                    postsHtml = '<p class="text-center text-muted py-8">No tienes publicaciones aún</p>';
-                }
-                
-                document.getElementById('main-container').innerHTML = `
-                    <div class="fade-in">
-                        <button onclick="showDashboard(currentUser)" class="text-muted hover:text-text mb-4">← Volver</button>
-                        <h2 class="text-2xl font-bold mb-6">Mis publicaciones</h2>
-                        <div class="space-y-4">${postsHtml}</div>
-                    </div>
-                `;
-            } catch (err) {
-                document.getElementById('main-container').innerHTML = `
-                    <div class="fade-in">
-                        <button onclick="showDashboard(currentUser)" class="text-muted hover:text-text mb-4">← Volver</button>
-                        <h2 class="text-2xl font-bold mb-6">Mis publicaciones</h2>
-                        <p class="text-center text-muted">Error al cargar publicaciones</p>
-                    </div>
-                `;
-            }
-        }
+
+        // Cerrar modal al hacer click fuera
+        document.getElementById('demo-modal').addEventListener('click', function(e) {
+            if (e.target === this) hideDemoModal();
+        });
     </script>
 </body>
 </html>
