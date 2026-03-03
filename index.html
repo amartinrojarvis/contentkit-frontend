@@ -42,13 +42,6 @@
         .gradient-bg {
             background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
         }
-        .loading {
-            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: .5; }
-        }
     </style>
 </head>
 <body class="bg-background text-text min-h-screen">
@@ -57,415 +50,216 @@
     <nav class="fixed top-0 w-full bg-surface/90 backdrop-blur-md border-b border-gray-100 z-50">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
-                <div class="flex items-center gap-2">
+                <a href="/" class="flex items-center gap-2">
                     <div class="w-9 h-9 rounded-xl gradient-bg flex items-center justify-center">
                         <i class="fas fa-wand-magic-sparkles text-white text-sm"></i>
                     </div>
                     <span class="font-bold text-xl">ContentKit</span>
-                    <span id="demo-badge" class="hidden px-2 py-0.5 bg-accent/10 text-accent text-xs font-semibold rounded-full ml-2">DEMO MODE</span>
-                </div>
-                <div class="flex items-center gap-4" id="nav-content">
-                    <!-- Content loaded dynamically -->
+                    <span id="demo-badge" class="hidden px-2 py-0.5 bg-accent/10 text-accent text-xs font-semibold rounded-full ml-2">DEMO</span>
+                </a>
+                <div class="flex items-center gap-3" id="nav-buttons">
+                    <button onclick="showLogin()" class="px-4 py-2 text-muted hover:text-text transition">Iniciar sesión</button>
+                    <button onclick="showSignup()" class="px-5 py-2 gradient-bg text-white rounded-xl hover:opacity-90 transition font-medium">Crear cuenta</button>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- Main Content Container -->
-    <div id="app-container">
-        <!-- Landing Page -->
-        <div id="landing-page">
-            <!-- Hero -->
-            <section class="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
-                <div class="max-w-5xl mx-auto text-center">
-                    <div class="inline-flex items-center gap-2 px-4 py-2 bg-primary/5 rounded-full text-primary text-sm font-medium mb-6">
-                        <i class="fas fa-sparkles"></i>
-                        <span id="hero-badge">🎉 Alpha: 50% OFF primer mes</span>
-                    </div>
-                    
-                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-6 leading-tight">
-                        Tu agencia de contenido,
-                        <br>
-                        <span class="gradient-text">en una app</span>
-                    </h1>
-                    
-                    <p class="text-lg sm:text-xl text-muted max-w-2xl mx-auto mb-8 leading-relaxed">
-                        4 publicaciones profesionales generadas por IA + la estrategia para hacer crecer tu cuenta.
-                        <br class="hidden sm:block">
-                        Sin contratos. Cancela cuando quieras.
-                    </p>
-                    
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-                        <button onclick="showPricing()" class="px-8 py-4 gradient-bg text-white rounded-2xl hover:opacity-90 transition font-semibold text-lg flex items-center justify-center gap-2">
-                            Ver planes
-                            <i class="fas fa-arrow-right"></i>
-                        </button>
-                        <button id="demo-btn" onclick="showDemoSignup()" class="hidden px-8 py-4 bg-accent text-white rounded-2xl hover:bg-accent/90 transition font-semibold text-lg">
-                            🎮 Probar gratis (Demo)
-                        </button>
-                    </div>
-                    
-                    <div class="flex flex-wrap justify-center gap-8 text-sm text-muted">
-                        <span class="flex items-center gap-2">
-                            <i class="fas fa-check-circle text-accent"></i>
-                            Imágenes con ChatGPT
-                        </span>
-                        <span class="flex items-center gap-2">
-                            <i class="fas fa-check-circle text-accent"></i>
-                            Copy optimizado
-                        </span>
-                        <span class="flex items-center gap-2">
-                            <i class="fas fa-check-circle text-accent"></i>
-                            Estrategia incluida
-                        </span>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Pricing Section -->
-            <section id="pricing" class="py-20 px-4 sm:px-6 lg:px-8 bg-white">
-                <div class="max-w-6xl mx-auto">
-                    <div class="text-center mb-16">
-                        <h2 class="text-3xl sm:text-4xl font-bold mb-4">Elige tu plan</h2>
-                        <p class="text-muted text-lg">Todo incluido: imágenes + copy + estrategia</p>
-                    </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        <!-- Starter -->
-                        <div class="bg-surface rounded-3xl p-8 shadow-lg border-2 border-transparent hover:border-primary transition">
-                            <div class="mb-6">
-                                <h3 class="text-xl font-bold mb-2">Starter</h3>
-                                <p class="text-muted text-sm">Perfecto para empezar</p>
-                            </div>
-                            
-                            <div class="mb-6">
-                                <span class="text-4xl font-bold">50€</span>
-                                <span class="text-muted">/mes</span>
-                            </div>
-                            
-                            <ul class="space-y-4 mb-8">
-                                <li class="flex items-start gap-3">
-                                    <i class="fas fa-check text-accent mt-1"></i>
-                                    <span><strong>4 publicaciones</strong> (fotos)</span>
-                                </li>
-                                <li class="flex items-start gap-3">
-                                    <i class="fas fa-check text-accent mt-1"></i>
-                                    <span>Copy + hashtags incluidos</span>
-                                </li>
-                                <li class="flex items-start gap-3">
-                                    <i class="fas fa-check text-accent mt-1"></i>
-                                    <span>Estrategia de contenido IA</span>
-                                </li>
-                            </ul>
-                            
-                            <button onclick="selectPlan('starter')" class="w-full py-3 border-2 border-primary text-primary rounded-xl hover:bg-primary hover:text-white transition font-semibold">
-                                Elegir Starter
-                            </button>
-                        </div>
-                        
-                        <!-- Pro -->
-                        <div class="bg-surface rounded-3xl p-8 shadow-xl border-2 border-secondary relative">
-                            <div class="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                                <span class="bg-secondary text-white px-4 py-1 rounded-full text-xs font-semibold">MÁS POPULAR</span>
-                            </div>
-                            
-                            <div class="mb-6">
-                                <h3 class="text-xl font-bold mb-2">Pro</h3>
-                                <p class="text-muted text-sm">Para creadores serios</p>
-                            </div>
-                            
-                            <div class="mb-6">
-                                <span class="text-4xl font-bold">99€</span>
-                                <span class="text-muted">/mes</span>
-                            </div>
-                            
-                            <ul class="space-y-4 mb-8">
-                                <li class="flex items-start gap-3">
-                                    <i class="fas fa-check text-accent mt-1"></i>
-                                    <span><strong>8 publicaciones</strong> (fotos)</span>
-                                </li>
-                                <li class="flex items-start gap-3">
-                                    <i class="fas fa-check text-accent mt-1"></i>
-                                    <span><strong>1 sesión/mes</strong> con Alberto</span>
-                                </li>
-                                <li class="flex items-start gap-3">
-                                    <i class="fas fa-check text-accent mt-1"></i>
-                                    <span>Soporte prioritario</span>
-                                </li>
-                            </ul>
-                            
-                            <button onclick="selectPlan('pro')" class="w-full py-3 gradient-bg text-white rounded-xl hover:opacity-90 transition font-semibold">
-                                Elegir Pro
-                            </button>
-                        </div>
-                        
-                        <!-- Business -->
-                        <div class="bg-surface rounded-3xl p-8 shadow-lg border-2 border-transparent hover:border-primary transition">
-                            <div class="mb-6">
-                                <h3 class="text-xl font-bold mb-2">Business</h3>
-                                <p class="text-muted text-sm">Para marcas y agencias</p>
-                            </div>
-                            
-                            <div class="mb-6">
-                                <span class="text-4xl font-bold">199€</span>
-                                <span class="text-muted">/mes</span>
-                            </div>
-                            
-                            <ul class="space-y-4 mb-8">
-                                <li class="flex items-start gap-3">
-                                    <i class="fas fa-check text-accent mt-1"></i>
-                                    <span><strong>16 publicaciones</strong> (fotos)</span>
-                                </li>
-                                <li class="flex items-start gap-3">
-                                    <i class="fas fa-check text-accent mt-1"></i>
-                                    <span><strong>2 sesiones/mes</strong> con Alberto</span>
-                                </li>
-                                <li class="flex items-start gap-3">
-                                    <i class="fas fa-check text-accent mt-1"></i>
-                                    <span>WhatsApp directo</span>
-                                </li>
-                            </ul>
-                            
-                            <button onclick="selectPlan('business')" class="w-full py-3 border-2 border-primary text-primary rounded-xl hover:bg-primary hover:text-white transition font-semibold">
-                                Elegir Business
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <p class="text-center text-muted text-sm mt-8">
-                        <i class="fas fa-shield-alt mr-1"></i>
-                        Cancela cuando quieras. Sin permanencia.
-                    </p>
-                </div>
-            </section>
-
-            <!-- How it Works -->
-            <section class="py-20 px-4 sm:px-6 lg:px-8">
-                <div class="max-w-5xl mx-auto">
-                    <div class="text-center mb-16">
-                        <h2 class="text-3xl sm:text-4xl font-bold mb-4">¿Cómo funciona?</h2>
-                        <p class="text-muted text-lg">De tu idea a publicación lista en minutos</p>
-                    </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                        <div class="text-center">
-                            <div class="w-16 h-16 rounded-2xl gradient-bg flex items-center justify-center text-white text-2xl mx-auto mb-4">
-                                <i class="fas fa-file-alt"></i>
-                            </div>
-                            <h3 class="font-semibold mb-2">1. Brief</h3>
-                            <p class="text-muted text-sm">Describe qué necesitas comunicar</p>
-                        </div>
-                        
-                        <div class="text-center">
-                            <div class="w-16 h-16 rounded-2xl bg-secondary flex items-center justify-center text-white text-2xl mx-auto mb-4">
-                                <i class="fas fa-wand-magic-sparkles"></i>
-                            </div>
-                            <h3 class="font-semibold mb-2">2. Generación</h3>
-                            <p class="text-muted text-sm">IA crea imagen + copy + hashtags</p>
-                        </div>
-                        
-                        <div class="text-center">
-                            <div class="w-16 h-16 rounded-2xl bg-accent flex items-center justify-center text-white text-2xl mx-auto mb-4">
-                                <i class="fas fa-eye"></i>
-                            </div>
-                            <h3 class="font-semibold mb-2">3. Revisión</h3>
-                            <p class="text-muted text-sm">Aprueba o pide ajustes</p>
-                        </div>
-                        
-                        <div class="text-center">
-                            <div class="w-16 h-16 rounded-2xl bg-purple-500 flex items-center justify-center text-white text-2xl mx-auto mb-4">
-                                <i class="fas fa-download"></i>
-                            </div>
-                            <h3 class="font-semibold mb-2">4. Publica</h3>
-                            <p class="text-muted text-sm">Descarga y súbelo a tus redes</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- FAQ -->
-            <section class="py-20 px-4 sm:px-6 lg:px-8 bg-white">
-                <div class="max-w-3xl mx-auto">
-                    <h2 class="text-3xl font-bold text-center mb-12">Preguntas frecuentes</h2>
-                    
-                    <div class="space-y-6">
-                        <div class="bg-surface rounded-2xl p-6 shadow-sm">
-                            <h3 class="font-semibold mb-2">¿Qué incluye exactamente cada publicación?</h3>
-                            <p class="text-muted">Cada publicación incluye: 1 imagen generada con ChatGPT Image 1.5 en alta calidad, copy/caption optimizado para tu plataforma, y hashtags relevantes investigados automáticamente.</p>
-                        </div>
-                        
-                        <div class="bg-surface rounded-2xl p-6 shadow-sm">
-                            <h3 class="font-semibold mb-2">¿Puedo pedir cambios en las publicaciones?</h3>
-                            <p class="text-muted">Sí, si no te gusta el resultado puedes solicitar una regeneración (contrae 1 crédito adicional) o ajustes específicos como "más colorido" o "tono más formal".</p>
-                        </div>
-                        
-                        <div class="bg-surface rounded-2xl p-6 shadow-sm">
-                            <h3 class="font-semibold mb-2">¿Para qué plataformas sirve el contenido?</h3>
-                            <p class="text-muted">Actualmente optimizamos para Instagram (feed, stories, reels), TikTok y LinkedIn. Próximamente añadiremos más formatos incluyendo video corto de 8 segundos.</p>
-                        </div>
-                        
-                        <div class="bg-surface rounded-2xl p-6 shadow-sm">
-                            <h3 class="font-semibold mb-2">¿Qué son las sesiones con Alberto?</h3>
-                            <p class="text-muted">Son videollamadas de 30 minutos donde Alberto (experto en contenido) revisa tu estrategia, analiza tu cuenta y te da recomendaciones personalizadas para mejorar tus resultados.</p>
-                        </div>
-                        
-                        <div class="bg-surface rounded-2xl p-6 shadow-sm">
-                            <h3 class="font-semibold mb-2">¿Puedo cancelar cuando quiera?</h3>
-                            <p class="text-muted">Sí, sin preguntas. Cancela desde tu cuenta y seguirás teniendo acceso hasta el final del período pagado. No hay permanencia ni penalizaciones.</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- CTA Final -->
-            <section class="py-20 px-4 sm:px-6 lg:px-8 gradient-bg text-white">
-                <div class="max-w-3xl mx-auto text-center">
-                    <h2 class="text-3xl sm:text-4xl font-bold mb-4">¿Listo para transformar tu contenido?</h2>
-                    <p class="text-white/80 text-lg mb-8">Empieza hoy con 50% de descuento en tu primer mes</p>
-                    
-                    <button onclick="showPricing()" class="px-8 py-4 bg-white text-primary rounded-2xl hover:bg-gray-100 transition font-semibold text-lg">
-                        Ver planes y empezar
-                    </button>
-                    
-                    <p class="text-white/60 text-sm mt-4">Código: ALPHA50</p>
-                </div>
-            </section>
-
-            <!-- Footer -->
-            <footer class="py-12 px-4 sm:px-6 lg:px-8 border-t border-gray-100">
-                <div class="max-w-6xl mx-auto">
-                    <div class="flex flex-col md:flex-row justify-between items-center gap-6">
-                        <div class="flex items-center gap-2">
-                            <div class="w-8 h-8 rounded-lg gradient-bg flex items-center justify-center">
-                                <i class="fas fa-wand-magic-sparkles text-white text-xs"></i>
-                            </div>
-                            <span class="font-bold text-lg">ContentKit</span>
-                            <span id="footer-demo-badge" class="hidden px-2 py-0.5 bg-accent text-white text-xs rounded-full">DEMO</span>
-                        </div>
-                        
-                        <div class="flex gap-6 text-sm text-muted">
-                            <a href="#" class="hover:text-text transition">Términos</a>
-                            <a href="#" class="hover:text-text transition">Privacidad</a>
-                            <a href="#" class="hover:text-text transition">Contacto</a>
-                        </div>
-                        
-                        <p class="text-sm text-muted">© 2026 ContentKit Alpha</p>
-                    </div>
-                </div>
-            </footer>
+    <!-- Hero Section -->
+    <section class="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-5xl mx-auto text-center">
+            <div id="hero-badge" class="inline-flex items-center gap-2 px-4 py-2 bg-primary/5 rounded-full text-primary text-sm font-medium mb-6">
+                <i class="fas fa-sparkles"></i>
+                <span>🎉 Modo DEMO: Prueba sin límites</span>
+            </div>
+            
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-6 leading-tight">
+                Tu agencia de contenido,
+                <br>
+                <span class="gradient-text">en una app</span>
+            </h1>
+            
+            <p class="text-lg sm:text-xl text-muted max-w-2xl mx-auto mb-8 leading-relaxed">
+                Genera publicaciones profesionales con IA. Prueba gratis sin tarjeta, sin compromiso.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button onclick="showSignup()" class="px-8 py-4 gradient-bg text-white rounded-2xl hover:opacity-90 transition font-semibold text-lg">
+                    Empezar gratis →
+                </button>
+            </div>
+            
+            <div class="flex flex-wrap justify-center gap-8 text-sm text-muted mt-8">
+                <span class="flex items-center gap-2"><i class="fas fa-check-circle text-accent"></i> Imágenes con ChatGPT</span>
+                <span class="flex items-center gap-2"><i class="fas fa-check-circle text-accent"></i> Copy optimizado</span>
+                <span class="flex items-center gap-2"><i class="fas fa-check-circle text-accent"></i> Sin tarjeta</span>
+            </div>
         </div>
+    </section>
 
-        <!-- Demo Signup Modal -->
-        <div id="demo-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
-            <div class="bg-surface rounded-3xl p-8 max-w-md w-full shadow-2xl">
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-2xl font-bold">🎮 Modo Demo</h3>
-                    <button onclick="hideDemoModal()" class="text-muted hover:text-text">
-                        <i class="fas fa-times text-xl"></i>
-                    </button>
-                </div>
-                
-                <p class="text-muted mb-6">Crea una cuenta de prueba con generación ilimitada. Perfecto para testear antes de suscribirte.</p>
-                
-                <form class="space-y-4" onsubmit="handleDemoSignup(event)">
-                    <div>
-                        <label class="block text-sm font-medium mb-1">Email</label>
-                        <input type="email" name="email" class="w-full p-3 rounded-xl border border-gray-200 focus:border-primary outline-none" placeholder="tu@email.com" required>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium mb-1">Contraseña</label>
-                        <input type="password" name="password" class="w-full p-3 rounded-xl border border-gray-200 focus:border-primary outline-none" placeholder="••••••••" required>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium mb-1">Nombre de marca</label>
-                        <input type="text" name="brand_name" class="w-full p-3 rounded-xl border border-gray-200 focus:border-primary outline-none" placeholder="@micuenta" required>
-                    </div>
-                    
-                    <button type="submit" id="demo-signup-btn" class="w-full py-3 gradient-bg text-white rounded-xl hover:opacity-90 transition font-semibold">
-                        Crear cuenta demo
-                    </button>
-                </form>
-                
-                <div id="demo-error" class="hidden mt-4 p-3 bg-red-50 text-red-600 rounded-xl text-sm"></div>
+    <!-- Login/Signup Modal -->
+    <div id="auth-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="bg-surface rounded-3xl p-8 max-w-md w-full shadow-2xl relative">
+            <button onclick="hideAuthModal()" class="absolute top-4 right-4 text-muted hover:text-text">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+            
+            <div id="auth-form-container">
+                <!-- Form loaded dynamically -->
             </div>
         </div>
     </div>
 
+    <!-- Footer -->
+    <footer class="py-12 px-4 sm:px-6 lg:px-8 border-t border-gray-100">
+        <div class="max-w-6xl mx-auto text-center text-sm text-muted">
+            <p>ContentKit Alpha — Tu agencia de contenido, en una app</p>
+        </div>
+    </footer>
+
     <script>
-        // Config
         const API_URL = window.location.hostname === 'localhost' 
             ? 'http://localhost:5000' 
             : 'https://contentkit-backend.onrender.com';
 
-        // Detectar modo demo al cargar
-        document.addEventListener('DOMContentLoaded', checkDemoMode);
-
+        // Check demo mode
         async function checkDemoMode() {
             try {
                 const response = await fetch(`${API_URL}/api/plans`);
                 const data = await response.json();
-                
                 if (data.demo_mode) {
-                    // Mostrar badges de demo
                     document.getElementById('demo-badge').classList.remove('hidden');
-                    document.getElementById('footer-demo-badge').classList.remove('hidden');
-                    document.getElementById('demo-btn').classList.remove('hidden');
-                    document.getElementById('hero-badge').innerHTML = '🎮 Modo DEMO: Generación ilimitada';
                 }
             } catch (e) {
-                console.log('No se pudo verificar modo demo');
-            }
-            
-            // Verificar si hay sesión
-            const token = localStorage.getItem('token');
-            if (token) {
-                fetchUser(token);
+                console.log('API no disponible');
             }
         }
+        checkDemoMode();
 
-        function showPricing() {
-            document.getElementById('pricing').scrollIntoView({ behavior: 'smooth' });
+        function showLogin() {
+            document.getElementById('auth-modal').classList.remove('hidden');
+            document.getElementById('auth-modal').classList.add('flex');
+            document.getElementById('auth-form-container').innerHTML = `
+                <h2 class="text-2xl font-bold mb-2">Iniciar sesión</h2>
+                <p class="text-muted text-sm mb-6">Accede a tu cuenta</p>
+                
+                <form onsubmit="handleLogin(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Email</label>
+                        <input type="email" name="email" class="w-full p-3 rounded-xl border border-gray-200 focus:border-primary outline-none" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Contraseña</label>
+                        <input type="password" name="password" class="w-full p-3 rounded-xl border border-gray-200 focus:border-primary outline-none" required>
+                    </div>
+                    <button type="submit" id="login-btn" class="w-full py-3 gradient-bg text-white rounded-xl hover:opacity-90 transition font-semibold">
+                        Entrar
+                    </button>
+                </form>
+                
+                <p class="text-center text-sm text-muted mt-4">
+                    ¿No tienes cuenta? <button onclick="showSignup()" class="text-primary hover:underline">Crear cuenta</button>
+                </p>
+                <div id="login-error" class="hidden mt-4 p-3 bg-red-50 text-red-600 rounded-xl text-sm"></div>
+            `;
         }
 
-        function showDemoSignup() {
-            document.getElementById('demo-modal').classList.remove('hidden');
-            document.getElementById('demo-modal').classList.add('flex');
+        function showSignup() {
+            document.getElementById('auth-modal').classList.remove('hidden');
+            document.getElementById('auth-modal').classList.add('flex');
+            document.getElementById('auth-form-container').innerHTML = `
+                <h2 class="text-2xl font-bold mb-2">Crear cuenta</h2>
+                <p class="text-muted text-sm mb-6">Modo DEMO: Sin límite de generaciones</p>
+                
+                <form onsubmit="handleSignup(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Email</label>
+                        <input type="email" name="email" class="w-full p-3 rounded-xl border border-gray-200 focus:border-primary outline-none" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Contraseña</label>
+                        <input type="password" name="password" class="w-full p-3 rounded-xl border border-gray-200 focus:border-primary outline-none" required minlength="6">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Marca/Cuenta</label>
+                        <input type="text" name="brand_name" class="w-full p-3 rounded-xl border border-gray-200 focus:border-primary outline-none" placeholder="@mimarca" required>
+                    </div>
+                    <button type="submit" id="signup-btn" class="w-full py-3 gradient-bg text-white rounded-xl hover:opacity-90 transition font-semibold">
+                        Crear cuenta gratis
+                    </button>
+                </form>
+                
+                <p class="text-center text-sm text-muted mt-4">
+                    ¿Ya tienes cuenta? <button onclick="showLogin()" class="text-primary hover:underline">Iniciar sesión</button>
+                </p>
+                <div id="signup-error" class="hidden mt-4 p-3 bg-red-50 text-red-600 rounded-xl text-sm"></div>
+            `;
         }
 
-        function hideDemoModal() {
-            document.getElementById('demo-modal').classList.add('hidden');
-            document.getElementById('demo-modal').classList.remove('flex');
+        function hideAuthModal() {
+            document.getElementById('auth-modal').classList.add('hidden');
+            document.getElementById('auth-modal').classList.remove('flex');
         }
 
-        function selectPlan(plan) {
-            localStorage.setItem('selectedPlan', plan);
-            showDemoSignup();
-        }
-
-        async function handleDemoSignup(e) {
+        async function handleLogin(e) {
             e.preventDefault();
-            const btn = document.getElementById('demo-signup-btn');
-            const errorDiv = document.getElementById('demo-error');
+            const btn = document.getElementById('login-btn');
+            const errorDiv = document.getElementById('login-error');
+            
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Entrando...';
+            btn.disabled = true;
+            
+            const formData = new FormData(e.target);
+            
+            try {
+                const response = await fetch(`${API_URL}/api/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: formData.get('email'),
+                        password: formData.get('password')
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    localStorage.setItem('token', result.token);
+                    window.location.href = '/dashboard.html';
+                } else {
+                    errorDiv.textContent = result.error || 'Credenciales incorrectas';
+                    errorDiv.classList.remove('hidden');
+                }
+            } catch (err) {
+                errorDiv.textContent = 'Error de conexión';
+                errorDiv.classList.remove('hidden');
+            } finally {
+                btn.innerHTML = 'Entrar';
+                btn.disabled = false;
+            }
+        }
+
+        async function handleSignup(e) {
+            e.preventDefault();
+            const btn = document.getElementById('signup-btn');
+            const errorDiv = document.getElementById('signup-error');
             
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creando...';
             btn.disabled = true;
             
             const formData = new FormData(e.target);
-            const data = {
-                email: formData.get('email'),
-                password: formData.get('password'),
-                name: formData.get('email').split('@')[0],
-                brand_name: formData.get('brand_name'),
-                plan_id: 'starter'
-            };
             
             try {
                 const response = await fetch(`${API_URL}/api/auth/register`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
+                    body: JSON.stringify({
+                        email: formData.get('email'),
+                        password: formData.get('password'),
+                        name: formData.get('email').split('@')[0],
+                        brand_name: formData.get('brand_name'),
+                        plan_id: 'starter'
+                    })
                 });
                 
                 const result = await response.json();
@@ -481,30 +275,14 @@
                 errorDiv.textContent = 'Error de conexión';
                 errorDiv.classList.remove('hidden');
             } finally {
-                btn.innerHTML = 'Crear cuenta demo';
+                btn.innerHTML = 'Crear cuenta gratis';
                 btn.disabled = false;
             }
         }
 
-        async function fetchUser(token) {
-            try {
-                const response = await fetch(`${API_URL}/api/user/profile`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                
-                if (response.ok) {
-                    window.location.href = '/dashboard.html';
-                } else {
-                    localStorage.removeItem('token');
-                }
-            } catch (e) {
-                localStorage.removeItem('token');
-            }
-        }
-
-        // Cerrar modal al hacer click fuera
-        document.getElementById('demo-modal').addEventListener('click', function(e) {
-            if (e.target === this) hideDemoModal();
+        // Close modal on outside click
+        document.getElementById('auth-modal').addEventListener('click', function(e) {
+            if (e.target === this) hideAuthModal();
         });
     </script>
 </body>

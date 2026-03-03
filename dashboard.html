@@ -58,14 +58,19 @@
             : 'https://contentkit-backend.onrender.com';
 
         let currentUser = null;
+        let isLoading = false;
 
         document.addEventListener('DOMContentLoaded', () => {
             const token = localStorage.getItem('token');
             if (!token) {
-                window.location.href = '/';
+                window.location.replace('/');
                 return;
             }
-            loadDashboard(token);
+            // Solo cargar una vez
+            if (!isLoading) {
+                isLoading = true;
+                loadDashboard(token);
+            }
         });
 
         async function loadDashboard(token) {
@@ -84,7 +89,9 @@
                 renderDashboard(currentUser, postsData.posts || []);
             } catch (err) {
                 localStorage.removeItem('token');
-                window.location.href = '/';
+                window.location.replace('/');
+            } finally {
+                isLoading = false;
             }
         }
 
@@ -291,7 +298,7 @@
 
         function logout() {
             localStorage.removeItem('token');
-            window.location.href = '/';
+            window.location.replace('/');
         }
     </script>
 </body>
