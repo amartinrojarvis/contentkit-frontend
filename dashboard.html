@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - ContentKit</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6366F1',
+                        secondary: '#F59E0B',
+                        accent: '#10B981',
+                        surface: '#FFFFFF',
+                        background: '#FAFAFA',
+                        text: '#1F2937',
+                        muted: '#6B7280'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>* { font-family: 'Inter', system-ui, sans-serif; }</style>
+</head>
+<body class="bg-background text-text min-h-screen">
+    
+    <nav class="bg-surface border-b border-gray-100">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="/" class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-purple-500 flex items-center justify-center">
+                        <i class="fas fa-wand-magic-sparkles text-white text-xs"></i>
+                    </div>
+                    <span class="font-bold">ContentKit</span>
+                </a>
+                
+                <div class="flex items-center gap-4">
+                    <span id="user-name" class="text-sm text-muted"></span>
+                    <button onclick="logout()" class="text-sm text-muted hover:text-text">Cerrar sesión</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto py-8 px-4">
+        <div id="dashboard-content">
+            <!-- Content loaded via JS -->
+        </div>
+    </main>
+
+    <script>
+        const API_URL = window.location.hostname === 'localhost' 
+            ? 'http://localhost:5000' 
+            : 'https://contentkit-backend.onrender.com';
+
+        let currentUser = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = '/';
+                return;
+            }
+            loadDashboard(token);
+        });
+
+        async function loadDashboard(token) {
+            try {
+                const [userRes, postsRes] = await Promise.all([
+                    fetch(`${API_URL}/api/user/profile`, { headers: { 'Authorization': `Bearer ${token}` } }),
+                    fetch(`${API_URL}/api/posts/list`, { headers: { 'Authorization': `Bearer ${token}` } })
+                ]);
+
+                if (!userRes.ok) throw new Error('Session expired');
+
+                const userData = await userRes.json();
+                const postsData = await postsRes.json();
+                
+                currentUser = userData.user;
+                renderDashboard(currentUser, postsData.posts || []);
+            } catch (err) {
+                localStorage.removeItem('token');
+                window.location.href = '/';
+            }
+        }
+
+        function renderDashboard(user, posts) {
+            document.getElementById('user-name').textContent = user.name;
+            const remaining = user.posts_allowed - user.posts_used_this_period;
+
+            document.getElementById('dashboard-content').innerHTML = `
+                <div class="bg-gradient-to-r from-primary to-purple-500 rounded-2xl p-6 text-white mb-8">
+                    <h1 class="text-2xl font-bold mb-2">¡Hola, ${user.name}! 👋</h1>
+                    <p class="opacity-90">Tienes <strong>${remaining}</strong> generaciones disponibles</p>
+                    ${user.demo_mode ? '<p class="text-xs opacity-75 mt-1">🎮 Modo DEMO activado</p>' : ''}
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <button onclick="showCreatePost()" class="bg-surface rounded-2xl p-6 text-left hover:shadow-lg transition border-2 border-transparent hover:border-primary">
+                        <div class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center text-2xl mb-4">
+                            <i class="fas fa-plus"></i>
+                        </div>
+                        <h3 class="font-semibold text-lg">Nueva publicación</h3>
+                        <p class="text-sm text-muted">Generar imagen + copy con IA</p>
+                    </button>
+
+                    <button onclick="showMyPosts()" class="bg-surface rounded-2xl p-6 text-left hover:shadow-lg transition border-2 border-transparent hover:border-primary">
+                        <div class="w-12 h-12 rounded-xl bg-secondary/10 text-secondary flex items-center justify-center text-2xl mb-4">
+                            <i class="fas fa-images"></i>
+                        </div>
+                        <h3 class="font-semibold text-lg">Mis publicaciones (${posts.length})</h3>
+                        <p class="text-sm text-muted">Ver historial y descargar</p>
+                    </button>
+                </div>
+
+                ${posts.length > 0 ? `
+                <div class="bg-surface rounded-2xl p-6">
+                    <h3 class="font-semibold mb-4">Últimas publicaciones</h3>
+                    <div class="space-y-4">
+                        ${posts.slice(0, 3).map(post => `
+                            <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-xl">
+                                <div class="w-16 h-16 bg-gradient-to-br from-purple-200 to-pink-200 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-image text-purple-400"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="font-medium truncate">${post.brief?.substring(0, 50) || 'Publicación'}...</p>
+                                    <p class="text-sm text-muted">${new Date(post.created_at).toLocaleDateString()}</p>
+                                </div>
+                                <span class="px-2 py-1 bg-green-100 text-green-600 text-xs rounded-full">${post.status}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                ` : ''}
+            `;
+        }
+
+        function showCreatePost() {
+            const remaining = currentUser.posts_allowed - currentUser.posts_used_this_period;
+            
+            if (remaining <= 0) {
+                alert('Has alcanzado el límite de generaciones. Contacta para upgrade.');
+                return;
+            }
+
+            document.getElementById('dashboard-content').innerHTML = `
+                <button onclick="loadDashboard(localStorage.getItem('token'))" class="text-muted hover:text-text mb-4">← Volver</button>
+                
+                <h2 class="text-2xl font-bold mb-6">Nueva publicación</h2>
+                
+                <form onsubmit="handleCreatePost(event)" class="bg-surface rounded-2xl p-6 space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">¿Qué quieres comunicar? *</label>
+                        <textarea name="brief" rows="4" class="w-full p-4 rounded-xl border border-gray-200 focus:border-primary outline-none resize-none" 
+                            placeholder="Ej: Un post sobre los 3 errores más comunes al empezar en fotografía..." required></textarea>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Plataforma</label>
+                            <select name="platform" class="w-full p-3 rounded-xl border border-gray-200 focus:border-primary outline-none">
+                                <option value="instagram">📸 Instagram</option>
+                                <option value="tiktok">🎵 TikTok</option>
+                                <option value="linkedin">💼 LinkedIn</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Formato</label>
+                            <select name="format" class="w-full p-3 rounded-xl border border-gray-200 focus:border-primary outline-none">
+                                <option value="square">□ Cuadrado (1:1)</option>
+                                <option value="vertical">▯ Vertical (4:5)</option>
+                                <option value="story">▯ Story (9:16)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="create-error" class="hidden p-4 bg-red-50 text-red-600 rounded-xl"></div>
+
+                    <button type="submit" id="create-btn" class="w-full py-4 gradient-bg text-white rounded-xl hover:opacity-90 transition font-semibold text-lg">
+                        ✨ Generar publicación
+                    </button>
+                </form>
+            `;
+        }
+
+        async function handleCreatePost(e) {
+            e.preventDefault();
+            const btn = document.getElementById('create-btn');
+            const errorDiv = document.getElementById('create-error');
+            const token = localStorage.getItem('token');
+
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generando...';
+            btn.disabled = true;
+
+            const form = e.target;
+            const data = {
+                post_type: 'product',
+                brief: form.brief.value,
+                platform: form.platform.value,
+                format: form.format.value,
+                tone: 'professional'
+            };
+
+            try {
+                const response = await fetch(`${API_URL}/api/posts/generate`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    showPostResult(result.post);
+                } else {
+                    errorDiv.textContent = result.error || 'Error al generar';
+                    errorDiv.classList.remove('hidden');
+                }
+            } catch (err) {
+                errorDiv.textContent = 'Error de conexión. Intenta de nuevo.';
+                errorDiv.classList.remove('hidden');
+            } finally {
+                btn.innerHTML = '✨ Generar publicación';
+                btn.disabled = false;
+            }
+        }
+
+        function showPostResult(post) {
+            document.getElementById('dashboard-content').innerHTML = `
+                <button onclick="loadDashboard(localStorage.getItem('token'))" class="text-muted hover:text-text mb-4">← Volver al dashboard</button>
+
+                <div class="bg-surface rounded-2xl shadow-lg overflow-hidden">
+                    <div class="p-6 border-b border-gray-100 bg-gradient-to-r from-primary to-purple-500 text-white">
+                        <h2 class="text-xl font-bold">✨ ¡Publicación lista!</h2>
+                        <p class="text-sm opacity-90">Generado el ${new Date(post.created_at).toLocaleString()}</p>
+                    </div>
+
+                    <div class="p-6">
+                        <div class="bg-gradient-to-br from-purple-100 to-pink-100 rounded-xl p-8 mb-6 flex items-center justify-center">
+                            <div class="bg-white rounded-xl shadow p-6 max-w-sm text-center">
+                                <div class="aspect-square bg-gradient-to-br from-purple-200 to-pink-200 rounded-lg mb-4 flex items-center justify-center">
+                                    <i class="fas fa-image text-4xl text-purple-400"></i>
+                                </div>
+                                <p class="text-sm text-gray-500">📷 Imagen generada por ChatGPT</p>
+                                <p class="text-xs text-gray-400 mt-1">1024x1024 • HD</p>
+                            </div>
+                        </div>
+
+                        <div class="mb-6">
+                            <h3 class="text-sm font-semibold text-primary uppercase tracking-wide mb-3">📝 Copy sugerido</h3>
+                            <div class="bg-gray-50 rounded-xl p-4 whitespace-pre-wrap font-mono text-sm">${post.generated_copy || 'Generando copy...'}</div>
+                            <button onclick="navigator.clipboard.writeText('${(post.generated_copy || '').replace(/'/g, "\\'")}')" 
+                                class="mt-2 text-sm text-primary hover:underline">
+                                📋 Copiar al portapapeles
+                            </button>
+                        </div>
+
+                        <div class="mb-6">
+                            <h3 class="text-sm font-semibold text-primary uppercase tracking-wide mb-3">🏷️ Hashtags recomendados</h3>
+                            <div class="flex flex-wrap gap-2">
+                                ${(post.generated_hashtags || ['#content', '#marketing']).map(tag => `
+                                    <span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">${tag}</span>
+                                `).join('')}
+                            </div>
+                        </div>
+
+                        <div class="flex gap-3">
+                            <button onclick="showCreatePost()" class="flex-1 py-3 bg-gray-100 text-text rounded-xl hover:bg-gray-200 transition font-medium">
+                                🔄 Crear otra
+                            </button>
+                            <button onclick="loadDashboard(localStorage.getItem('token'))" class="flex-1 py-3 gradient-bg text-white rounded-xl hover:opacity-90 transition font-medium">
+                                📂 Ir al dashboard
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showMyPosts() {
+            loadDashboard(localStorage.getItem('token'));
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            window.location.href = '/';
+        }
+    </script>
+</body>
+</html>
