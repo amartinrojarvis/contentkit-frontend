@@ -7,7 +7,7 @@ const CONFIG = {
     // Ejemplo: 'https://contentkit-api.onrender.com'
     API_URL: window.location.hostname === 'localhost' 
         ? 'http://localhost:5000' 
-        : 'https://contentkit-api.onrender.com',
+        : 'https://contentkit-backend.onrender.com',
     
     VERSION: 'alpha-1.1'
 };
