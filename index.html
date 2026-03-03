@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ContentKit Alpha — Tu agencia de contenido, en una app</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6366F1',
+                        secondary: '#F59E0B',
+                        accent: '#10B981',
+                        surface: '#FFFFFF',
+                        background: '#FAFAFA',
+                        text: '#1F2937',
+                        muted: '#6B7280'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { font-family: 'Inter', system-ui, sans-serif; }
+        .fade-in { animation: fadeIn 0.5s ease-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 50%, #EC4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 50px -15px rgba(99, 102, 241, 0.25);
+        }
+        .step-active {
+            background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+        }
+        .pulse-ring {
+            animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 0.8; }
+            100% { transform: scale(1.4); opacity: 0; }
+        }
+        .pricing-card {
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .pricing-card:hover {
+            border-color: #6366F1;
+            transform: scale(1.02);
+        }
+        .pricing-card.popular {
+            border-color: #F59E0B;
+            position: relative;
+        }
+        .pricing-card.popular::before {
+            content: "MÁS POPULAR";
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #F59E0B;
+            color: white;
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="bg-background text-text min-h-screen">
+    
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-surface/90 backdrop-blur-md border-b border-gray-100 z-50">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-2">
+                    <div class="w-9 h-9 rounded-xl gradient-bg flex items-center justify-center">
+                        <i class="fas fa-wand-magic-sparkles text-white text-sm"></i>
+                    </div>
+                    <span class="font-bold text-xl">ContentKit</span>
+                    <span class="px-2 py-0.5 bg-primary/10 text-primary text-xs font-semibold rounded-full">Alpha</span>
+                </div>
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="#pricing" class="text-muted hover:text-text transition font-medium">Planes</a>
+                    <a href="#como-funciona" class="text-muted hover:text-text transition font-medium">Cómo funciona</a>
+                    <button onclick="showAuthModal()" class="px-5 py-2.5 gradient-bg text-white rounded-xl hover:opacity-90 transition font-medium">
+                        Empezar ahora
+                    </button>
+                </div>
+                <button class="md:hidden text-text p-2">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-5xl mx-auto text-center">
+            <div class="inline-flex items-center gap-2 px-4 py-2 bg-primary/5 rounded-full text-primary text-sm font-medium mb-6">
+                <i class="fas fa-sparkles"></i>
+                <span>🎉 Alpha: 50% OFF primer mes con código ALPHA50</span>
+            </div>
+            
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-6 leading-tight">
+                Tu agencia de contenido,
+                <br>
+                <span class="gradient-text">en una app</span>
+            </h1>
+            
+            <p class="text-lg sm:text-xl text-muted max-w-2xl mx-auto mb-8 leading-relaxed">
+                4 publicaciones profesionales generadas por IA + la estrategia para hacer crecer tu cuenta.
+                <br class="hidden sm:block">
+                Sin contratos. Cancela cuando quieras.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+                <button onclick="scrollToPricing()" class="px-8 py-4 gradient-bg text-white rounded-2xl hover:opacity-90 transition font-semibold text-lg flex items-center justify-center gap-2">
+                    Ver planes
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+                <button onclick="showDemo()" class="px-8 py-4 bg-surface border-2 border-gray-200 text-text rounded-2xl hover:border-primary hover:text-primary transition font-semibold text-lg">
+                    Ver ejemplo
+                </button>
+            </div>
+            
+            <!-- Trust badges -->
+            <div class="flex flex-wrap justify-center gap-8 text-sm text-muted">
+                <span class="flex items-center gap-2">
+                    <i class="fas fa-check-circle text-accent"></i>
+                    Imágenes con ChatGPT
+                </span>
+                <span class="flex items-center gap-2">
+                    <i class="fas fa-check-circle text-accent"></i>
+                    Copy optimizado
+                </span>
+                <span class="flex items-center gap-2">
+                    <i class="fas fa-check-circle text-accent"></i>
+                    Estrategia incluida
+                </span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl sm:text-4xl font-bold mb-4">Elige tu plan</h2>
+                <p class="text-muted text-lg">Todo incluido: imágenes + copy + estrategia</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Starter -->
+                <div class="pricing-card bg-surface rounded-3xl p-8 shadow-lg">
+                    <div class="mb-6">
+                        <h3 class="text-xl font-bold mb-2">Starter</h3>
+                        <p class="text-muted text-sm">Perfecto para empezar</p>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <span class="text-4xl font-bold">50€</span>
+                        <span class="text-muted">/mes</span>
+                    </div>
+                    
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check text-accent mt-1"></i>
+                            <span><strong>4 publicaciones</strong> (fotos)</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check text-accent mt-1"></i>
+                            <span>Copy + hashtags incluidos</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check text-accent mt-1"></i>
+                            <span>Estrategia de contenido IA</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check text-accent mt-1"></i>
+                            <span>Formatos: Instagram, TikTok, LinkedIn</span>
+                        </li>
+                        <li class="flex items-start gap-3 text-muted">
+                            <i class="fas fa-times mt-1"></i>
+                            <span>Sesiones con Alberto</span>
+                        </li>
+                    </ul>
+                    
+                    <button onclick="selectPlan('starter')" class="w-full py-3 border-2 border-primary text-primary rounded-xl hover:bg-primary hover:text-white transition font-semibold">
+                        Elegir Starter
+                    </button>
+                </div>
+                
+                <!-- Pro (Popular) -->
+                <div class="pricing-card popular bg-surface rounded-3xl p-8 shadow-xl">
+                    <div class="mb-6">
+                        <h3 class="text-xl font-bold mb-2">Pro</h3>
+                        <p class="text-muted text-sm">Para creadores serios</p>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <span class="text-4xl font-bold">99€</span>
+                        <span class="text-muted">/mes</span>
+                    </div>
+                    
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check text-accent mt-1"></i>
+                            <span><strong>8 publicaciones</strong> (fotos)</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check text-accent mt-1"></i>
+                            <span>Copy + hashtags incluidos</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check text-accent mt-1"></i>
+                            <span>Estrategia de contenido IA</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check text-accent mt-1"></i>
+                            <span>Formatos: Instagram, TikTok, LinkedIn</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check text-accent mt-1"></i>
+                            <span><strong>1 sesión/mes</strong> con Alberto (30min)</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check text-accent mt-1"></i>
+                            <span>Soporte prioritario</span>
+                        </li>
+                    </ul>
+                    
+                    <button onclick="selectPlan('pro')" class="w-full py-3 gradient-bg text-white rounded-xl hover:opacity-90 transition font-semibold">
+                        Elegir Pro
+                    </button>
+                </div>
+                
+                <!-- Business -->
+                <div class="pricing-card bg-surface rounded-3xl p-8 shadow-lg">
+                    <div class="mb-6">
+                        <h3 class="text-xl font-bold mb-2">Business</h3>
+                        <p class="text-muted text-sm">Para marcas y agencias</p>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <span class="text-4xl font-bold">199€</span>
+                        <span class="text-muted">/mes</span>
+                    </div>
+                    
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check text-accent mt-1"></i>
+                            <span><strong>16 publicaciones</strong> (fotos)</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check text-accent mt-1"></i>
+                            <span>Copy + hashtags incluidos</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check text-accent mt-1"></i>
+                            <span>Estrategia de contenido IA</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check text-accent mt-1"></i>
+                            <span>Formatos: Instagram, TikTok, LinkedIn</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check text-accent mt-1"></i>
+                            <span><strong>2 sesiones/mes</strong> con Alberto</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check text-accent mt-1"></i>
+                            <span>Soporte prioritario + WhatsApp</span>
+                        </li>
+                    </ul>
+                    
+                    <button onclick="selectPlan('business')" class="w-full py-3 border-2 border-primary text-primary rounded-xl hover:bg-primary hover:text-white transition font-semibold">
+                        Elegir Business
+                    </button>
+                </div>
+            </div>
+            
+            <p class="text-center text-muted text-sm mt-8">
+                <i class="fas fa-shield-alt mr-1"></i>
+                Cancela cuando quieras. Sin permanencia.
+            </p>
+        </div>
+    </section>
+
+    <!-- How it Works -->
+    <section id="como-funciona" class="py-20 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl sm:text-4xl font-bold mb-4">¿Cómo funciona?</h2>
+                <p class="text-muted text-lg">De tu idea a publicación lista en minutos</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="text-center">
+                    <div class="w-16 h-16 rounded-2xl gradient-bg flex items-center justify-center text-white text-2xl mx-auto mb-4">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <h3 class="font-semibold mb-2">1. Brief</h3>
+                    <p class="text-muted text-sm">Describe qué necesitas comunicar</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-16 h-16 rounded-2xl bg-secondary flex items-center justify-center text-white text-2xl mx-auto mb-4">
+                        <i class="fas fa-wand-magic-sparkles"></i>
+                    </div>
+                    <h3 class="font-semibold mb-2">2. Generación</h3>
+                    <p class="text-muted text-sm">IA crea imagen + copy + hashtags</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-16 h-16 rounded-2xl bg-accent flex items-center justify-center text-white text-2xl mx-auto mb-4">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <h3 class="font-semibold mb-2">3. Revisión</h3>
+                    <p class="text-muted text-sm">Aprueba o pide ajustes</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-16 h-16 rounded-2xl bg-purple-500 flex items-center justify-center text-white text-2xl mx-auto mb-4">
+                        <i class="fas fa-download"></i>
+                    </div>
+                    <h3 class="font-semibold mb-2">4. Publica</h3>
+                    <p class="text-muted text-sm">Descarga y súbelo a tus redes</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Example Output -->
+    <section class="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl sm:text-4xl font-bold mb-4">Así se ve el resultado</h2>
+                <p class="text-muted text-lg">Imagen generada con ChatGPT + copy optimizado</p>
+            </div>
+            
+            <div class="bg-surface rounded-3xl shadow-xl overflow-hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2">
+                    <div class="bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center p-8">
+                        <div class="bg-white rounded-2xl shadow-lg p-6 max-w-xs">
+                            <div class="aspect-square bg-gradient-to-br from-purple-200 to-pink-200 rounded-xl mb-4 flex items-center justify-center">
+                                <i class="fas fa-image text-4xl text-purple-400"></i>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-2">Imagen generada</p>
+                            <p class="text-xs text-gray-400">1024x1024 • ChatGPT Image 1.5</p>
+                        </div>
+                    </div>
+                    
+                    <div class="p-8">
+                        <div class="mb-6">
+                            <span class="text-xs font-semibold text-primary uppercase tracking-wide">Copy sugerido</span>
+                            <p class="mt-2 text-lg leading-relaxed">
+                                "Tu piel merece un respiro 💧
+                                <br><br>
+                                Nuestra crema hidratante facial está formulada para devolverle a tu piel esa sensación de frescura que amas.
+                                <br><br>
+                                ✨ Hidratación 24h<br>
+                                ✨ Textura ligera, no grasa<br>
+                                ✨ Ingredientes naturales
+                                <br><br>
+                                🔗 Link en bio para descubrir más"
+                            </p>
+                        </div>
+                        
+                        <div class="pt-6 border-t border-gray-100">
+                            <span class="text-xs font-semibold text-muted uppercase tracking-wide">Hashtags</span>
+                            <p class="mt-2 text-sm text-primary">#skincare #hidratacionfacial #cuidadodelapiel #naturalbeauty #skincareroutine</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="py-20 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-12">Preguntas frecuentes</h2>
+            
+            <div class="space-y-6">
+                <div class="bg-surface rounded-2xl p-6 shadow-sm">
+                    <h3 class="font-semibold mb-2">¿Qué incluye exactamente cada publicación?</h3>
+                    <p class="text-muted">Cada publicación incluye: 1 imagen generada con ChatGPT Image 1.5 en alta calidad, copy/caption optimizado para tu plataforma, y hashtags relevantes investigados automáticamente.</p>
+                </div>
+                
+                <div class="bg-surface rounded-2xl p-6 shadow-sm">
+                    <h3 class="font-semibold mb-2">¿Puedo pedir cambios en las publicaciones?</h3>
+                    <p class="text-muted">Sí, si no te gusta el resultado puedes solicitar una regeneración (contrae 1 crédito adicional) o ajustes específicos como "más colorido" o "tono más formal".</p>
+                </div>
+                
+                <div class="bg-surface rounded-2xl p-6 shadow-sm">
+                    <h3 class="font-semibold mb-2">¿Para qué plataformas sirve el contenido?</h3>
+                    <p class="text-muted">Actualmente optimizamos para Instagram (feed, stories, reels), TikTok y LinkedIn. Próximamente añadiremos más formatos incluyendo video corto de 8 segundos.</p>
+                </div>
+                
+                <div class="bg-surface rounded-2xl p-6 shadow-sm">
+                    <h3 class="font-semibold mb-2">¿Qué son las sesiones con Alberto?</h3>
+                    <p class="text-muted">Son videollamadas de 30 minutos donde Alberto (experto en contenido) revisa tu estrategia, analiza tu cuenta y te da recomendaciones personalizadas para mejorar tus resultados.</p>
+                </div>
+                
+                <div class="bg-surface rounded-2xl p-6 shadow-sm">
+                    <h3 class="font-semibold mb-2">¿Puedo cancelar cuando quiera?</h3>
+                    <p class="text-muted">Sí, sin preguntas. Cancela desde tu cuenta y seguirás teniendo acceso hasta el final del período pagado. No hay permanencia ni penalizaciones.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Final -->
+    <section class="py-20 px-4 sm:px-6 lg:px-8 gradient-bg text-white">
+        <div class="max-w-3xl mx-auto text-center">
+            <h2 class="text-3xl sm:text-4xl font-bold mb-4">¿Listo para transformar tu contenido?</h2>
+            <p class="text-white/80 text-lg mb-8">Empieza hoy con 50% de descuento en tu primer mes</p>
+            <button onclick="scrollToPricing()" class="px-8 py-4 bg-white text-primary rounded-2xl hover:bg-gray-100 transition font-semibold text-lg">
+                Ver planes y empezar
+            </button>
+            <p class="text-white/60 text-sm mt-4">Código: ALPHA50</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 px-4 sm:px-6 lg:px-8 border-t border-gray-100">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-lg gradient-bg flex items-center justify-center">
+                        <i class="fas fa-wand-magic-sparkles text-white text-xs"></i>
+                    </div>
+                    <span class="font-bold text-lg">ContentKit</span>
+                </div>
+                
+                <div class="flex gap-6 text-sm text-muted">
+                    <a href="#" class="hover:text-text transition">Términos</a>
+                    <a href="#" class="hover:text-text transition">Privacidad</a>
+                    <a href="#" class="hover:text-text transition">Contacto</a>
+                </div>
+                
+                <p class="text-sm text-muted">© 2026 ContentKit Alpha</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Auth Modal -->
+    <div id="auth-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="bg-surface rounded-3xl p-8 max-w-md w-full shadow-2xl">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold">Crear cuenta</h3>
+                <button onclick="hideAuthModal()" class="text-muted hover:text-text">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <form class="space-y-4" onsubmit="handleSignup(event)">
+                <div>
+                    <label class="block text-sm font-medium mb-1">Email</label>
+                    <input type="email" class="w-full p-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none" placeholder="tu@email.com" required>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium mb-1">Contraseña</label>
+                    <input type="password" class="w-full p-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none" placeholder="••••••••" required>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium mb-1">Nombre de marca/cuenta</label>
+                    <input type="text" class="w-full p-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none" placeholder="@micuenta" required>
+                </div>
+                
+                <button type="submit" class="w-full py-3 gradient-bg text-white rounded-xl hover:opacity-90 transition font-semibold">
+                    Continuar al pago →
+                </button>
+            </form>
+            
+            <p class="text-center text-sm text-muted mt-4">
+                ¿Ya tienes cuenta? <a href="#" class="text-primary hover:underline">Inicia sesión</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Functions
+        function scrollToPricing() {
+            document.getElementById('pricing').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function showAuthModal() {
+            document.getElementById('auth-modal').classList.remove('hidden');
+            document.getElementById('auth-modal').classList.add('flex');
+        }
+        
+        function hideAuthModal() {
+            document.getElementById('auth-modal').classList.add('hidden');
+            document.getElementById('auth-modal').classList.remove('flex');
+        }
+        
+        function selectPlan(plan) {
+            showAuthModal();
+            // Store selected plan
+            localStorage.setItem('selectedPlan', plan);
+        }
+        
+        function handleSignup(e) {
+            e.preventDefault();
+            alert('✅ En una implementación real, esto redirigiría a Stripe Checkout para el plan: ' + localStorage.getItem('selectedPlan'));
+            hideAuthModal();
+        }
+        
+        function showDemo() {
+            // Scroll to example section
+            document.querySelector('section:nth-of-type(4)').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Close modal on outside click
+        document.getElementById('auth-modal').addEventListener('click', function(e) {
+            if (e.target === this) hideAuthModal();
+        });
+    </script>
+</body>
+</html>
