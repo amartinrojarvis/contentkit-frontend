@@ -78,6 +78,13 @@
                 const postsData = await postsRes.json();
                 
                 currentUser = userData.user;
+
+                // Hard block: onboarding required
+                if (!currentUser.onboarding_completed) {
+                    window.location.replace('/onboarding.html');
+                    return;
+                }
+
                 document.getElementById('user-name').textContent = currentUser.name;
                 renderDashboard(currentUser, postsData.posts || []);
             } catch (err) {
